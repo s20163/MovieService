@@ -23,7 +23,7 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<List<Movie>> listAllMovies() {
-        List<Movie> movies = movieService.listMovies(true);
+        List<Movie> movies = movieService.listMovies();
         System.out.println(movies);
 //        return new ResponseEntity(movies, HttpStatus.OK);
         return ResponseEntity.ok(movies);
