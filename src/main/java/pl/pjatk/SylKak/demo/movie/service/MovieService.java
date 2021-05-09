@@ -10,12 +10,16 @@ import java.util.List;
 @Service
 public class MovieService {
 
-    public List<Movie> listMovies() {
+    private List<Movie> list = new ArrayList<>();
+
+    public void prepareMovies() {
         Movie hp1 = new Movie(1, "Harry Potter and the Philosopher's Stone", MovieGenre.FANTASY, 152);
         Movie lotr1 = new Movie(2, "LotR: The Fellowship of the Ring", MovieGenre.FANTASY, 208);
-        List<Movie> list = new ArrayList<Movie>();
         list.add(hp1);
         list.add(lotr1);
+    }
+
+    public List<Movie> listMovies() {
         return list;
     }
 }

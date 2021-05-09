@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.pjatk.SylKak.demo.movie.model.Movie;
 import pl.pjatk.SylKak.demo.movie.service.MovieService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,13 +18,11 @@ public class MovieController {
 
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
+        movieService.prepareMovies();
     }
 
     @GetMapping
     public ResponseEntity<List<Movie>> listAllMovies() {
-        List<Movie> movies = movieService.listMovies();
-        System.out.println(movies);
-//        return new ResponseEntity(movies, HttpStatus.OK);
-        return ResponseEntity.ok(movies);
+        return new ResponseEntity(movieService.listMovies(), HttpStatus.OK);
     }
 }
