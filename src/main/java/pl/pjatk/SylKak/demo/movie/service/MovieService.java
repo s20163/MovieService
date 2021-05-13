@@ -22,4 +22,29 @@ public class MovieService {
     public List<Movie> listMovies() {
         return list;
     }
+
+    public Movie getMovie(Long movieID) {
+        Movie movie = list.stream().filter(m -> m.getID().equals(movieID)).findFirst().get();
+        return movie;
+    }
+
+    public Movie postMovie(Movie movie) {
+        list.add(movie);
+        return movie;
+    }
+
+    public Movie putMovie(Long movieID, Movie movie) {
+        for (Movie m : list) {
+            if (m.getID().equals(movieID)) {
+                m.setTitle(movie.getTitle());
+                m.setGenre(movie.getGenre());
+                m.setDurationInMin(movie.getDurationInMin());
+            }
+        }
+        return movie;
+    }
+
+    public boolean deleteMovie(Long movieID) {
+        return list.removeIf(m -> m.getID().equals(movieID));
+    }
 }

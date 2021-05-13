@@ -2,9 +2,7 @@ package pl.pjatk.SylKak.demo.movie.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.pjatk.SylKak.demo.movie.model.Movie;
 import pl.pjatk.SylKak.demo.movie.service.MovieService;
 
@@ -23,7 +21,30 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<List<Movie>> listAllMovies() {
-//        return new ResponseEntity<List<Movie>>(movieService.listMovies(), HttpStatus.OK);
         return ResponseEntity.ok(movieService.listMovies());
+    }
+
+    @GetMapping("/{movieID}")
+    public ResponseEntity<Movie> getMovie(@PathVariable Long movieID) {
+        return ResponseEntity.ok(movieService.getMovie(movieID));
+    }
+
+    @PostMapping
+    public ResponseEntity<Movie> postMovie(@RequestBody Movie movie) {
+        return ResponseEntity.ok(movieService.postMovie(movie));
+    }
+
+    @PutMapping("/{movieID}")
+    public ResponseEntity<Movie> putMovie(@PathVariable Long movieID, @RequestBody Movie movie) {
+        return ResponseEntity.ok(movieService.putMovie(movieID, movie));
+    }
+
+    @DeleteMapping("/{movieID}")
+    public ResponseEntity<Void> deleteMovie(@PathVariable Long movieID) {
+        if (movieService.deleteMovie(movieID)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 }
