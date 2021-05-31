@@ -1,50 +1,49 @@
 package pl.pjatk.SylKak.demo.movie.service;
 
 import org.springframework.stereotype.Service;
+import pl.pjatk.SylKak.demo.movie.exception.MovieNotFoundException;
 import pl.pjatk.SylKak.demo.movie.model.Movie;
-import pl.pjatk.SylKak.demo.movie.model.MovieGenre;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieService {
 
-    private List<Movie> list = new ArrayList<>();
+    private final MovieRepository movieRepository;
 
-    public void prepareMovies() {
-        Movie hp1 = new Movie(1, "Harry Potter and the Philosopher's Stone", MovieGenre.FANTASY, 152);
-        Movie lotr1 = new Movie(2, "LotR: The Fellowship of the Ring", MovieGenre.FANTASY, 208);
-        list.add(hp1);
-        list.add(lotr1);
+    public MovieService(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     public List<Movie> listMovies() {
-        return list;
+        return movieRepository.findAll();
     }
 
-    public Movie getMovie(Long movieID) {
-        Movie movie = list.stream().filter(m -> m.getID().equals(movieID)).findFirst().get();
-        return movie;
+    public Optional<Movie> getMovie(Long movieID) {
+        if (movieRepository.findById(movieID).isEmpty()) {
+            throw new MovieNotFoundException("404 Movie not found");
+        }
+        return movieRepository.findById(movieID);
     }
 
     public Movie postMovie(Movie movie) {
-        list.add(movie);
-        return movie;
+        return movieRepository.save(movie);
     }
 
     public Movie putMovie(Long movieID, Movie movie) {
-        for (Movie m : list) {
-            if (m.getID().equals(movieID)) {
-                m.setTitle(movie.getTitle());
-                m.setGenre(movie.getGenre());
-                m.setDurationInMin(movie.getDurationInMin());
-            }
+        if (!movieRepository.findById(movieID).isEmpty()) {
+            movie.setId(movieID);
+            movie.setDurationInMin(movie.getDurationInMin());
+            movie.setGenre(movie.getGenre());
+            movie.setTitle(movie.getTitle());
+            return movieRepository.save(movie);
+        } else {
+            return movie;
         }
-        return movie;
     }
 
-    public boolean deleteMovie(Long movieID) {
-        return list.removeIf(m -> m.getID().equals(movieID));
+    public void deleteMovie(Long movieID) {
+        movieRepository.deleteById(movieID);
     }
 }

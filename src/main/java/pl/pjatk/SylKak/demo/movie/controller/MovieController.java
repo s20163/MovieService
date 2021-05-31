@@ -7,6 +7,7 @@ import pl.pjatk.SylKak.demo.movie.model.Movie;
 import pl.pjatk.SylKak.demo.movie.service.MovieService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/movies")
@@ -16,7 +17,6 @@ public class MovieController {
 
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
-        movieService.prepareMovies();
     }
 
     @GetMapping
@@ -25,7 +25,7 @@ public class MovieController {
     }
 
     @GetMapping("/{movieID}")
-    public ResponseEntity<Movie> getMovie(@PathVariable Long movieID) {
+    public ResponseEntity<Optional<Movie>> getMovie(@PathVariable Long movieID) {
         return ResponseEntity.ok(movieService.getMovie(movieID));
     }
 
@@ -41,10 +41,11 @@ public class MovieController {
 
     @DeleteMapping("/{movieID}")
     public ResponseEntity<Void> deleteMovie(@PathVariable Long movieID) {
-        if (movieService.deleteMovie(movieID)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        try {
+            movieService.deleteMovie(movieID);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
