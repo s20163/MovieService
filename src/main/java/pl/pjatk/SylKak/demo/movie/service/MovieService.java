@@ -58,9 +58,9 @@ public class MovieService {
     @Transactional
     @Modifying
     public void deleteMovie(Long movieID) {
-        if(!movieRepository.listMovieById(movieID).isEmpty()) {
+        if (!movieRepository.listMovieById(movieID).isEmpty()) {
             movieRepository.deleteMovie(movieID);
-        }else {
+        } else {
             throw new MovieNotFoundException();
         }
     }

@@ -18,9 +18,9 @@ public class Movie {
     private String title;
     @Enumerated(EnumType.STRING)
     private MovieGenre genre;
-    @Column(name="duration_in_min")
+    @Column(name = "duration_in_min")
     private int durationInMin;
-    @Column(name="isAvailable", columnDefinition = "TINYINT(1)")
+    @Column(name = "isAvailable", columnDefinition = "TINYINT(1)")
     private boolean isAvailable;
 
     public Movie(long id, String title, MovieGenre genre, int durationInMin, boolean isAvailable) {

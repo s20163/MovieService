@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
-
     List<Movie> listAllMovies();
 
     Optional<Movie> listMovieById(Long id);
