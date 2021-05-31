@@ -3,6 +3,7 @@ package pl.pjatk.SylKak.demo.movie.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.pjatk.SylKak.demo.movie.exception.MovieNotFoundException;
 import pl.pjatk.SylKak.demo.movie.model.Movie;
 import pl.pjatk.SylKak.demo.movie.service.MovieService;
 
@@ -39,12 +40,17 @@ public class MovieController {
         return ResponseEntity.ok(movieService.putMovie(movieID, movie));
     }
 
+    @PutMapping("/ava/{movieID}")
+    public ResponseEntity<Movie> putAvailability(@PathVariable Long movieID, @RequestBody Movie movie) {
+        return ResponseEntity.ok(movieService.putAvailability(movieID, movie));
+    }
+
     @DeleteMapping("/{movieID}")
     public ResponseEntity<Void> deleteMovie(@PathVariable Long movieID) {
         try {
             movieService.deleteMovie(movieID);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
+        } catch (MovieNotFoundException err) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
